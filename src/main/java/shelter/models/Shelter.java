@@ -3,7 +3,7 @@ package shelter.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Row {
+public class Shelter {
     @Expose
     private Integer id;
     @SerializedName("sido_name")

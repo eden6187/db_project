@@ -16,6 +16,10 @@ dependencies {
     implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.7.2'
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.json:json:20190722'
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
 }
 
 test {

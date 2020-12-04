@@ -1,17 +1,14 @@
 shelter/models/Head.java
  shelter.models.Head
-shelter/models/ShelterResponse.java
- shelter.models.ShelterResponse
-shelter/interfaces/ShelterRetrofitInterface.java
- shelter.interfaces.ShelterRetrofitInterface
-shelter/models/Row.java
- shelter.models.Row
-shelter/models/ShelterResponseElement.java
- shelter.models.ShelterResponseElement
-shelter/services/ShelterService.java
- shelter.services.ShelterService
- shelter.services.ShelterService$1
+shelter/models/Shelter.java
+ shelter.models.Shelter
 general/General.java
  general.General
+shelter/services/ShelterService.java
+ shelter.services.ShelterService
 main/Main.java
  main.Main
+db/DBController.java
+ db.DBController
+db/SQLExceptionHandler.java
+ db.SQLExceptionHandler
