@@ -312,6 +312,7 @@ public class DBController {
         String sqlT = "Insert Into Earthquake(eqId,lat,lon,eqTime,eqScale) "+
                 " Values(?,?,?,?,?);";
         try {
+
             this.makeConnection();
             PreparedStatement pre_stmt = this.connection.prepareStatement(sqlT);
             pre_stmt.setInt(1, earthquake.getEqId());
@@ -320,8 +321,24 @@ public class DBController {
             pre_stmt.setString(4, earthquake.getEqTime());
             pre_stmt.setFloat(5,earthquake.getEqScale());
             pre_stmt.execute();
+
         } catch (SQLException ex) {
             SQLExceptionHandler.printSQLException(ex);
         }
+    }
+
+    public void insertCare(Care care){
+        String sql = "Insert Into Care(userphonenum, parentphonenum) "+
+                " Values(?,?);";
+        try {
+            PreparedStatement pre_stmt = this.connection.prepareStatement(sql);
+            pre_stmt.setString(1, care.getUserPnum());
+            pre_stmt.setString(2, care.getParentPnum());
+            pre_stmt.execute();
+//            this.connection.commit();
+        }catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+
     }
 }

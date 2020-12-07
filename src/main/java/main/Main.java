@@ -8,6 +8,7 @@ import general.General;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import shelter.models.Care;
 import shelter.models.ParentInfo;
 import shelter.models.Shelter;
 import shelter.models.UserInfo;
@@ -52,6 +53,16 @@ public class Main {
 
         for(ParentInfo info : parentInfos){
             dbc.insertParentInfo(info);
+        }
+
+        for(int i = 0 ; i < userInfos.size(); i++){
+            for(int j = 2*i; j < 2*i + 2; j++){
+                System.out.println( "" + i + j);
+                Care care = new Care();
+                care.setUserPnum(userInfos.get(i).getuNum());
+                care.setParentPnum(parentInfos.get(j).getpNum());
+                dbc.insertCare(care);
+            }
         }
     }
 
