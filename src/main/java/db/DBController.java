@@ -5,12 +5,14 @@ import shelter.models.Shelter;
 import shelter.models.UserInfo;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DBController {
-    private static final String url = "jdbc:postgresql://localhost:5432/project";
-    private static final String user = "gim-yeonghyeon";
-    private static final String password = "!!dnwn556";
+    private static final String url = "jdbc:postgresql://localhost:5432/dbProject";
+    private static final String user = "postgres";
+    private static final String password = "oh54285428";
 
     private Connection connection = null;
     private static DBController singleTon;
@@ -110,22 +112,25 @@ public class DBController {
     }
 
     public void createTable(){
+//        dropTable();
         createShelterTable();
         createUserInfoTable();
         createParentInfoTable();
+        createCareTable();
     }
 
     public void dropTable(){
         dropUserInfoTable();
         dropParentInfoTable();
+        dropCareTable();
     }
 
     public void createUserInfoTable(){
         try{
             this.makeConnection();
             Statement stmt = this.connection.createStatement();
-            String sql = "Create Table UserInfo(userPhoneNum varchar(11), parentPhoneNum varchar(11)," +
-                    " userName varchar(20), parentName varchar(20), primary key(userPhoneNum,parentPhoneNum))";
+            String sql = "Create Table UserInfo(userPhoneNum varchar(11), userName varchar(20)," +
+                    " age int, gender char, primary key(userPhoneNum))";
             stmt.executeUpdate(sql);
         } catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
@@ -138,6 +143,20 @@ public class DBController {
             Statement stmt = this.connection.createStatement();
             String sql = "Create Table ParentInfo(parentPhoneNum varchar(11), parentName varchar(20), " +
                     "latitude float, longtitude float, primary key(parentPhoneNum))";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public void createCareTable(){
+        try{
+            this.makeConnection();
+            Statement stmt = this.connection.createStatement();
+            String sql = "Create Table Care(userPhoneNum varchar(11), parentPhoneNum varchar(11), " +
+                    "primary key(userPhoneNum,parentPhoneNum), " +
+                    "foreign key(userPhoneNum) references UserInfo(userPhoneNum)," +
+                    "foreign key(parentPhoneNum) references ParentInfo(parentPhoneNum));";
             stmt.executeUpdate(sql);
         } catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
@@ -177,6 +196,16 @@ public class DBController {
         }
     }
 
+    public void dropCareTable(){
+        try{
+            this.makeConnection();
+            Statement stmt = this.connection.createStatement();
+            String del3="drop table Care cascade;";
+            stmt.executeUpdate(del3);
+        }catch(SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
 
     public void insertParentInfo(ParentInfo info){
         String sqlP = "Insert Into ParentInfo(parentPhoneNum,parentName,latitude,longtitude)" +
@@ -188,8 +217,7 @@ public class DBController {
             pre_stmt.setString(2, info.getpName());
             pre_stmt.setFloat(3, info.getLat()); // 형변환
             pre_stmt.setFloat(4, info.getLon());
-            ResultSet resultSet = pre_stmt.executeQuery();
-
+            pre_stmt.execute();
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }
@@ -197,21 +225,60 @@ public class DBController {
     }
 
     public void insertUserInfo(UserInfo userInfo){
-        String sqlR = "Insert Into UserInfo(userPhoneNum,parentPhoneNum,userName,parentName)" +
+        String sqlR = "Insert Into UserInfo(userPhoneNum,userName,age,gender)" +
                 " Values(?,?,?,?);";
         try{
             this.makeConnection();
             PreparedStatement pre_stmt = this.connection.prepareStatement(sqlR);
-            pre_stmt = this.connection.prepareStatement(sqlR);
             pre_stmt.setString(1, userInfo.getuNum());
-            pre_stmt.setString(2, userInfo.getpNum());
-            pre_stmt.setString(3, userInfo.getuName());
-            pre_stmt.setString(4, userInfo.getpName());
+            pre_stmt.setString(2, userInfo.getuName());
+            pre_stmt.setInt(3, userInfo.getAge());
+            pre_stmt.setString(4, userInfo.getGender());
+            pre_stmt.execute();
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }
+    }
+
+//    public void insertDummyUserInfo(){
+//        String sqlUserDummy = "Insert Into UserInfo(UserPhoneNum,parentPhoneNum,userName,parentName)" +
+//                " Values(?,?,?,?);";
+//        try {
+//            this.makeConnection();
+//            PreparedStatement pre_stmt = this.connection.prepareStatement(sqlUserDummy);
+//            pre_stmt.setString(1, );
+//            pre_stmt.setString(2, );
+//            pre_stmt.setString(3, );
+//            pre_stmt.setString(4, );
+//        }catch (SQLException ex){
+//            SQLExceptionHandler.printSQLException(ex);
+//        }
+//    }
+
+    public void insertDummyParentInfo(){
 
     }
 
+    public static String RandomName(int size) {
+        Random r = new Random();
+        StringBuilder sb = new StringBuilder(size);
 
+        for(int i = 0; i < size; i++) {
+            char tmp = (char) ('a' + r.nextInt('z' - 'a'));
+            sb.append(tmp);
+        }
+        return sb.toString();
+    }
+
+    public static String RandomNumber(int size){
+        Random rand = new Random();
+        String numStr = "010";
+
+        for(int i=0;i<size;i++){
+            String ran = Integer.toString(rand.nextInt(10));
+
+            numStr += ran;
+        }
+        return numStr;
+    }
 }

@@ -2,17 +2,17 @@ shelter/models/Head.java
  shelter.models.Head
 shelter/models/Shelter.java
  shelter.models.Shelter
-db/SQLExceptionHandler.java
- db.SQLExceptionHandler
 shelter/services/ShelterService.java
  shelter.services.ShelterService
-shelter/models/UserInfo.java
- shelter.models.UserInfo
 shelter/models/ParentInfo.java
  shelter.models.ParentInfo
 general/General.java
  general.General
+shelter/models/UserInfo.java
+ shelter.models.UserInfo
 main/Main.java
  main.Main
 db/DBController.java
  db.DBController
+db/SQLExceptionHandler.java
+ db.SQLExceptionHandler
