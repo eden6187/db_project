@@ -54,9 +54,9 @@ public class Main {
         System.out.println("Parent의 이름을 입력해주세요");
         String pName = scan.next();
         System.out.println("Parent의 위도를 입력해주세요");
-        Float lon = scan.nextFloat();
+        Double lon = scan.nextDouble();
         System.out.println("parent의 경도을 입력해주세요");
-        Float lat = scan.nextFloat();
+        Double lat = scan.nextDouble();
         ParentInfo newParentInfo = new ParentInfo();
         newParentInfo.setLat(lat);
         newParentInfo.setLon(lon);

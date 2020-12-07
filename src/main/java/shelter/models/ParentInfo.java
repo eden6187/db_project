@@ -3,8 +3,8 @@ package shelter.models;
 public class ParentInfo {
     private String pNum;
     private String pName;
-    private Float lat;
-    private Float lon;
+    private Double lat;
+    private Double lon;
 
 
 
@@ -24,19 +24,19 @@ public class ParentInfo {
         this.pName = pName;
     }
 
-    public Float getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(Float lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public Float getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(Float lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 }

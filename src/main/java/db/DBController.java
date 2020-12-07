@@ -1,8 +1,6 @@
 package db;
 
-import shelter.models.ParentInfo;
-import shelter.models.Shelter;
-import shelter.models.UserInfo;
+import shelter.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -115,11 +113,17 @@ public class DBController {
         createShelterTable();
         createUserInfoTable();
         createParentInfoTable();
+        createCareTable();
+        createTyphoonTable();
+        createEarthQuakeTable();
     }
 
     public void dropTable(){
         dropUserInfoTable();
         dropParentInfoTable();
+        dropCareTable();
+        dropTyphoonTable();
+        dropEarthquakeTable();
     }
 
     public void createUserInfoTable(){
@@ -139,7 +143,7 @@ public class DBController {
             this.makeConnection();
             Statement stmt = this.connection.createStatement();
             String sql = "Create Table ParentInfo(parentPhoneNum varchar(11), parentName varchar(20), " +
-                    "latitude float, longtitude float, primary key(parentPhoneNum))";
+                    "latitude NUMERIC(8,6), longtitude NUMERIC(9,6), primary key(parentPhoneNum))";
             stmt.executeUpdate(sql);
         } catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
@@ -154,6 +158,32 @@ public class DBController {
                     "primary key(userPhoneNum,parentPhoneNum), " +
                     "foreign key(userPhoneNum) references UserInfo(userPhoneNum)," +
                     "foreign key(parentPhoneNum) references ParentInfo(parentPhoneNum));";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public void createTyphoonTable(){
+        try{
+            this.makeConnection();
+            Statement stmt = this.connection.createStatement();
+            String sql = "Create Table Typhoon(tId int, tName varchar(10)," +
+                    "latitude NUMERIC(8,6), longtitude NUMERIC(9,6), tTime varchar(20)" +
+                    ",primary key(tID));";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public void createEarthQuakeTable(){
+        try{
+            this.makeConnection();
+            Statement stmt = this.connection.createStatement();
+            String sql = "Create Table Earthquake(eqId int," +
+                    "latitude NUMERIC(8,6), longtitude NUMERIC(9,6), eqTime varchar(20), eqScale float" +
+                    ",primary key(eqID));";
             stmt.executeUpdate(sql);
         } catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
@@ -204,6 +234,28 @@ public class DBController {
         }
     }
 
+    public void dropTyphoonTable(){
+        try{
+            this.makeConnection();
+            Statement stmt = this.connection.createStatement();
+            String del1="drop table Typhoon cascade;";
+            stmt.executeUpdate(del1);
+        }catch(SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public void dropEarthquakeTable(){
+        try{
+            this.makeConnection();
+            Statement stmt = this.connection.createStatement();
+            String del2="drop table Earthquake cascade;";
+            stmt.executeUpdate(del2);
+        }catch(SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
     public void insertParentInfo(ParentInfo info){
         String sqlP = "Insert Into ParentInfo(parentPhoneNum,parentName,latitude,longtitude)" +
                 " Values(?,?,?,?);";
@@ -212,8 +264,8 @@ public class DBController {
             PreparedStatement pre_stmt = this.connection.prepareStatement(sqlP);
             pre_stmt.setString(1,info.getpNum());
             pre_stmt.setString(2, info.getpName());
-            pre_stmt.setFloat(3, info.getLat()); // 형변환
-            pre_stmt.setFloat(4, info.getLon());
+            pre_stmt.setDouble(3, info.getLat()); // 형변환
+            pre_stmt.setDouble(4, info.getLon());
             ResultSet resultSet = pre_stmt.executeQuery();
 
         }catch (SQLException ex){
@@ -222,10 +274,10 @@ public class DBController {
 
     }
 
-    public void insertUserInfo(UserInfo userInfo){
+    public void insertUserInfo(UserInfo userInfo) {
         String sqlR = "Insert Into UserInfo(userPhoneNum,userName,age,gender)" +
                 " Values(?,?,?,?);";
-        try{
+        try {
             this.makeConnection();
             PreparedStatement pre_stmt = this.connection.prepareStatement(sqlR);
             pre_stmt = this.connection.prepareStatement(sqlR);
@@ -234,50 +286,42 @@ public class DBController {
             pre_stmt.setInt(3, userInfo.getAge());
             pre_stmt.setString(4, userInfo.getGender());
             pre_stmt.execute();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             SQLExceptionHandler.printSQLException(ex);
         }
     }
 
-//    public void insertDummyUserInfo(){
-//        String sqlUserDummy = "Insert Into UserInfo(UserPhoneNum,parentPhoneNum,userName,parentName)" +
-//                " Values(?,?,?,?);";
-//        try {
-//            this.makeConnection();
-//            PreparedStatement pre_stmt = this.connection.prepareStatement(sqlUserDummy);
-//            pre_stmt.setString(1, );
-//            pre_stmt.setString(2, );
-//            pre_stmt.setString(3, );
-//            pre_stmt.setString(4, );
-//        }catch (SQLException ex){
-//            SQLExceptionHandler.printSQLException(ex);
-//        }
-//    }
-
-    public void insertDummyParentInfo(){
-
+    public void insertTyphoon(Typhoon typhoon){
+        String sqlT = "Insert Into Typhoon(tId, tName,lat,lon,tTime) "+
+                " Values(?,?,?,?,?);";
+        try {
+            this.makeConnection();
+            PreparedStatement pre_stmt = this.connection.prepareStatement(sqlT);
+            pre_stmt.setInt(1, typhoon.gettID());
+            pre_stmt.setString(2, typhoon.gettName());
+            pre_stmt.setDouble(3, typhoon.getLat());
+            pre_stmt.setDouble(4, typhoon.getLon());
+            pre_stmt.setString(5, typhoon.gettTime());
+            pre_stmt.execute();
+        } catch (SQLException ex) {
+            SQLExceptionHandler.printSQLException(ex);
+        }
     }
 
-    public static String RandomName(int size) {
-        Random r = new Random();
-        StringBuilder sb = new StringBuilder(size);
-
-        for(int i = 0; i < size; i++) {
-            char tmp = (char) ('a' + r.nextInt('z' - 'a'));
-            sb.append(tmp);
+    public void insertEarthquake(Earthquake earthquake){
+        String sqlT = "Insert Into Earthquake(eqId,lat,lon,eqTime,eqScale) "+
+                " Values(?,?,?,?,?);";
+        try {
+            this.makeConnection();
+            PreparedStatement pre_stmt = this.connection.prepareStatement(sqlT);
+            pre_stmt.setInt(1, earthquake.getEqId());
+            pre_stmt.setDouble(2, earthquake.getLat());
+            pre_stmt.setDouble(3, earthquake.getLon());
+            pre_stmt.setString(4, earthquake.getEqTime());
+            pre_stmt.setFloat(5,earthquake.getEqScale());
+            pre_stmt.execute();
+        } catch (SQLException ex) {
+            SQLExceptionHandler.printSQLException(ex);
         }
-        return sb.toString();
-    }
-
-    public static String RandomNumber(int size){
-        Random rand = new Random();
-        String numStr = "010";
-
-        for(int i=0;i<size;i++){
-            String ran = Integer.toString(rand.nextInt(10));
-
-            numStr += ran;
-        }
-        return numStr;
     }
 }
