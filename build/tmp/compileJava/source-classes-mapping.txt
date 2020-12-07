@@ -12,7 +12,9 @@ shelter/models/ParentInfo.java
  shelter.models.ParentInfo
 general/General.java
  general.General
-main/Main.java
- main.Main
 db/DBController.java
  db.DBController
+general/DummyGenerator.java
+ general.DummyGenerator
+main/Main.java
+ main.Main

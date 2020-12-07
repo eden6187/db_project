@@ -161,6 +161,7 @@ public class DBController {
             Statement stmt = this.connection.createStatement();
             String del1="drop table UserInfo cascade;";
             stmt.executeUpdate(del1);
+
         }catch(SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }
@@ -172,6 +173,7 @@ public class DBController {
             Statement stmt = this.connection.createStatement();
             String del2="drop table ParentInfo cascade;";
             stmt.executeUpdate(del2);
+
         }catch(SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }
@@ -181,6 +183,7 @@ public class DBController {
     public void insertParentInfo(ParentInfo info){
         String sqlP = "Insert Into ParentInfo(parentPhoneNum,parentName,latitude,longtitude)" +
                 " Values(?,?,?,?);";
+
         try{
             this.makeConnection();
             PreparedStatement pre_stmt = this.connection.prepareStatement(sqlP);
@@ -188,8 +191,7 @@ public class DBController {
             pre_stmt.setString(2, info.getpName());
             pre_stmt.setFloat(3, info.getLat()); // 형변환
             pre_stmt.setFloat(4, info.getLon());
-            ResultSet resultSet = pre_stmt.executeQuery();
-
+            pre_stmt.execute();
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }
@@ -207,6 +209,8 @@ public class DBController {
             pre_stmt.setString(2, userInfo.getpNum());
             pre_stmt.setString(3, userInfo.getuName());
             pre_stmt.setString(4, userInfo.getpName());
+            pre_stmt.execute();
+
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }

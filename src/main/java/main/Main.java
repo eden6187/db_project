@@ -1,19 +1,11 @@
 package main;
 
-import com.google.gson.Gson;
 import db.DBController;
-import db.SQLExceptionHandler;
-import general.General;
-import okhttp3.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import general.DummyGenerator;
 import shelter.models.ParentInfo;
 import shelter.models.Shelter;
 import shelter.models.UserInfo;
-import shelter.services.ShelterService;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,14 +27,23 @@ public class Main {
 //        if(dbc != null)
 //            dbc.shelterInfoBulkLoading(shelters);
 
-        dbc = DBController.getDBController();
-        // db connection 만들기
+//        dbc = DBController.getDBController();
+//        // db connection 만들기
+//
+//        dbc.createTable();
+//
+//        UserInfo userInfo = scanUserInfo();
+//        dbc.insertUserInfo(userInfo);
+//
+//        ParentInfo parentInfo = scanParentInfo();
+//        dbc.insertParentInfo(parentInfo);
 
-        dbc.createTable();
-        UserInfo userInfo = scanUserInfo();
-        dbc.insertUserInfo(userInfo);
-        ParentInfo parentInfo = scanParentInfo();
-        dbc.insertParentInfo(parentInfo);
+        ArrayList<String> pnum = DummyGenerator.generatePhoneNum(400);
+        int i = 0;
+        for(String num : pnum){
+            i++;
+            System.out.println(i +" "+num);
+        }
     }
 
     public static ParentInfo scanParentInfo(){
