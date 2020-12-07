@@ -42,9 +42,97 @@ public class SQLExceptionHandler {
         if (sqlState.equalsIgnoreCase("42P07"))
             return true;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if (sqlState.equalsIgnoreCase("42P01"))
             return true;
 
+        if (sqlState.equalsIgnoreCase("23505"))
+            return true;
         return false;
     }
 }

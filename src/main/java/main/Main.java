@@ -1,11 +1,19 @@
 package main;
 
+import com.google.gson.Gson;
 import db.DBController;
-import general.DummyGenerator;
+import db.SQLExceptionHandler;
+import general.General;
+import okhttp3.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import shelter.models.ParentInfo;
 import shelter.models.Shelter;
 import shelter.models.UserInfo;
+import shelter.services.ShelterService;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,23 +35,15 @@ public class Main {
 //        if(dbc != null)
 //            dbc.shelterInfoBulkLoading(shelters);
 
-//        dbc = DBController.getDBController();
-//        // db connection 만들기
-//
-//        dbc.createTable();
-//
+        dbc = DBController.getDBController();
+        // db connection 만들기
+
+        dbc.dropTable();
+        dbc.createTable();
 //        UserInfo userInfo = scanUserInfo();
 //        dbc.insertUserInfo(userInfo);
-//
 //        ParentInfo parentInfo = scanParentInfo();
 //        dbc.insertParentInfo(parentInfo);
-
-        ArrayList<String> pnum = DummyGenerator.generatePhoneNum(400);
-        int i = 0;
-        for(String num : pnum){
-            i++;
-            System.out.println(i +" "+num);
-        }
     }
 
     public static ParentInfo scanParentInfo(){
@@ -74,16 +74,16 @@ public class Main {
         String uPhoneNm = scan.next();
         System.out.println("user의 이름을 입력해주세요");
         String uName = scan.next();
-        System.out.println("Parent의 PhoneNumber를 입력해주세요");
-        String pPhoneNm = scan.next();
-        System.out.println("parent의 이름을 입력해주세요");
-        String pName = scan.next();
+        System.out.println("User의 Age를 입력해주세요");
+        Integer uAge = Integer.valueOf(scan.next());
+        System.out.println("User의 Gender를 입력해주세요");
+        String uGender = scan.next();
 
         UserInfo newInfo = new UserInfo();
-        newInfo.setpName(pName);
-        newInfo.setpNum(pPhoneNm);
-        newInfo.setuName(uName);
         newInfo.setuNum(uPhoneNm);
+        newInfo.setuName(uName);
+        newInfo.setAge(uAge);
+        newInfo.setGender(uGender);
 
         return newInfo;
     }

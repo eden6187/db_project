@@ -3,8 +3,8 @@ package shelter.models;
 public class UserInfo {
     private String uNum;
     private String uName;
-    private String pName;
-    private String pNum;
+    private Integer age;
+    private String gender;
 
     public String getuNum() {
         return uNum;
@@ -22,19 +22,19 @@ public class UserInfo {
         this.uName = uName;
     }
 
-    public String getpName() {
-        return pName;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setpName(String pName) {
-        this.pName = pName;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public String getpNum() {
-        return pNum;
+    public String getGender() {
+        return gender;
     }
 
-    public void setpNum(String pNum) {
-        this.pNum = pNum;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
