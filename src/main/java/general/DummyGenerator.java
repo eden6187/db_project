@@ -77,10 +77,10 @@ public class DummyGenerator {
             newParentInfo.setpName(randomName(10));
 
             randomLon = lonRangeMin + (lonRangeMax - lonRangeMin) * r.nextDouble();
-            newParentInfo.setLon((float) randomLon);
+            newParentInfo.setLon(randomLon);
 
             randomLat = latRangeMin + (latRangeMax - latRangeMin) * r.nextDouble();
-            newParentInfo.setLat((float) randomLat);
+            newParentInfo.setLat(randomLat);
 
             parentInfo.add(newParentInfo);
         }

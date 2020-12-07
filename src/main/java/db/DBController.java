@@ -266,7 +266,7 @@ public class DBController {
             pre_stmt.setString(2, info.getpName());
             pre_stmt.setDouble(3, info.getLat()); // 형변환
             pre_stmt.setDouble(4, info.getLon());
-            ResultSet resultSet = pre_stmt.executeQuery();
+            pre_stmt.execute();
 
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
