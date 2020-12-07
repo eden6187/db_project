@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 public class DBController {
-    private static final String url = "jdbc:postgresql://localhost:5432/project";
-    private static final String user = "gim-yeonghyeon";
-    private static final String password = "!!dnwn556";
+    private static final String url = "jdbc:postgresql://localhost:5432/dbProject";
+    private static final String user = "postgres";
+    private static final String password = "oh54285428";
 
     private Connection connection = null;
     private static DBController singleTon;
@@ -161,8 +161,8 @@ public class DBController {
             Statement stmt = this.connection.createStatement();
             String sql = "Create Table Care(userPhoneNum varchar(11), parentPhoneNum varchar(11), " +
                     "primary key(userPhoneNum,parentPhoneNum), " +
-                    "foreign key(userPhoneNum) references UserInfo(userPhoneNum)," +
-                    "foreign key(parentPhoneNum) references ParentInfo(parentPhoneNum));";
+                    "foreign key(userPhoneNum) references UserInfo(userPhoneNum) on delete cascade," +
+                    "foreign key(parentPhoneNum) references ParentInfo(parentPhoneNum) on delete cascade);";
             stmt.executeUpdate(sql);
         } catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
@@ -296,18 +296,19 @@ public class DBController {
         }
     }
 
-    public void insertTyphoon(Typhoon typhoon){
-        String sqlT = "Insert Into Typhoon(tId, tName,lat,lon,tTime) "+
-                " Values(?,?,?,?,?);";
+    public void insertTyphoon(){
+        String sqlT1 = "Insert Into Typhoon(tId, tName,latitude,longtitude,tTime) "+
+                " Values('11','Mae-Mi','35.124836','128.325815','201128-17:30:55');";
+        String sqlT2 = "Insert Into Typhoon(tId, tName,latitude,longtitude,tTime) "+
+                " Values('22','Gaeguri','35.321238','128.189523','201206-19:30:45');";
+        String sqlT3 = "Insert Into Typhoon(tId, tName,latitude,longtitude,tTime) "+
+                " Values('33','Cham-sae','35.651379','128.804521','201208-14:35:28');";
         try {
             this.makeConnection();
-            PreparedStatement pre_stmt = this.connection.prepareStatement(sqlT);
-            pre_stmt.setInt(1, typhoon.gettID());
-            pre_stmt.setString(2, typhoon.gettName());
-            pre_stmt.setDouble(3, typhoon.getLat());
-            pre_stmt.setDouble(4, typhoon.getLon());
-            pre_stmt.setString(5, typhoon.gettTime());
-            pre_stmt.execute();
+            Statement stmt = this.connection.createStatement();
+            stmt.executeUpdate(sqlT1);
+            stmt.executeUpdate(sqlT2);
+            stmt.executeUpdate(sqlT3);
         } catch (SQLException ex) {
             SQLExceptionHandler.printSQLException(ex);
         }
@@ -326,7 +327,6 @@ public class DBController {
             pre_stmt.setString(4, earthquake.getEqTime());
             pre_stmt.setFloat(5,earthquake.getEqScale());
             pre_stmt.execute();
-
         } catch (SQLException ex) {
             SQLExceptionHandler.printSQLException(ex);
         }
