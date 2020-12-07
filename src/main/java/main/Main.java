@@ -3,6 +3,7 @@ package main;
 import com.google.gson.Gson;
 import db.DBController;
 import db.SQLExceptionHandler;
+import general.DummyGenerator;
 import general.General;
 import okhttp3.*;
 import org.json.JSONArray;
@@ -40,10 +41,18 @@ public class Main {
 
         dbc.dropTable();
         dbc.createTable();
-//        UserInfo userInfo = scanUserInfo();
-//        dbc.insertUserInfo(userInfo);
-//        ParentInfo parentInfo = scanParentInfo();
-//        dbc.insertParentInfo(parentInfo);
+
+        ArrayList<String> pNum = DummyGenerator.generatePhoneNum(300);
+        ArrayList<UserInfo> userInfos = DummyGenerator.generateUserInfoFrom(new ArrayList<String>(pNum.subList(0,100)));
+        ArrayList<ParentInfo> parentInfos = DummyGenerator.generateParentInfoFrom((new ArrayList<String>(pNum.subList(100,300))));
+
+        for(UserInfo info : userInfos){
+            dbc.insertUserInfo(info);
+        }
+
+        for(ParentInfo info : parentInfos){
+            dbc.insertParentInfo(info);
+        }
     }
 
     public static ParentInfo scanParentInfo(){

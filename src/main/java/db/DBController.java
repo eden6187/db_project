@@ -214,7 +214,8 @@ public class DBController {
             pre_stmt.setString(2, info.getpName());
             pre_stmt.setFloat(3, info.getLat()); // 형변환
             pre_stmt.setFloat(4, info.getLon());
-            ResultSet resultSet = pre_stmt.executeQuery();
+            pre_stmt.execute();
+//            ResultSet resultSet = pre_stmt.executeQuery();
 
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
