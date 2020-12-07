@@ -48,7 +48,7 @@ public class DummyGenerator {
             UserInfo newUserInfo = new UserInfo();
             newUserInfo.setuNum(pnum.get(i));
             newUserInfo.setuName(randomName(10));
-            newUserInfo.setGender(gender == 0 ? "G" : "F");
+            newUserInfo.setGender(gender == 0 ? "M" : "F");
             newUserInfo.setAge(new Random().nextInt(50));
             userInfo.add(newUserInfo);
         }

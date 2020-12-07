@@ -4,15 +4,23 @@ shelter/models/Shelter.java
  shelter.models.Shelter
 shelter/services/ShelterService.java
  shelter.services.ShelterService
-shelter/models/ParentInfo.java
- shelter.models.ParentInfo
+shelter/models/Care.java
+ shelter.models.Care
 general/General.java
  general.General
 shelter/models/UserInfo.java
  shelter.models.UserInfo
-main/Main.java
- main.Main
-db/DBController.java
- db.DBController
+shelter/models/Earthquake.java
+ shelter.models.Earthquake
+shelter/models/Typhoon.java
+ shelter.models.Typhoon
+shelter/models/ParentInfo.java
+ shelter.models.ParentInfo
+general/DummyGenerator.java
+ general.DummyGenerator
 db/SQLExceptionHandler.java
  db.SQLExceptionHandler
+db/DBController.java
+ db.DBController
+main/Main.java
+ main.Main
