@@ -146,4 +146,15 @@ public class Shelter {
     public void setHeight(Integer height) {
         this.height = height;
     }
+
+    @Override
+    public String toString() {
+        String string = "";
+        string += "시설 이름 :"  + this.shelNm +"\n";
+        string += "시도 : " + this.sidoName +"\n";
+        string += "시군구 : " + this.sigunguName +"\n";
+        string += "위도 : " + this.lat +"\n";
+        string += "경도 : " + this.lon +"\n";
+        return string;
+    }
 }

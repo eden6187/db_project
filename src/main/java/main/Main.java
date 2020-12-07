@@ -1,21 +1,12 @@
 package main;
 
-import com.google.gson.Gson;
 import db.DBController;
-import db.SQLExceptionHandler;
 import general.DummyGenerator;
-import general.General;
-import okhttp3.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import shelter.models.Care;
 import shelter.models.ParentInfo;
 import shelter.models.Shelter;
 import shelter.models.UserInfo;
-import shelter.services.ShelterService;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -57,16 +48,24 @@ public class Main {
 
         for(int i = 0 ; i < userInfos.size(); i++){
             for(int j = 2*i; j < 2*i + 2; j++){
-                System.out.println( "" + i + j);
                 Care care = new Care();
                 care.setUserPnum(userInfos.get(i).getuNum());
                 care.setParentPnum(parentInfos.get(j).getpNum());
                 dbc.insertCare(care);
             }
         }
+
+        dbc.insertDummyEarthQuake();
+        ArrayList<ParentInfo> parent_in_danger = (ArrayList<ParentInfo>) dbc.getParentInfoNearEarthquake();
+
+        for(ParentInfo info : parent_in_danger){
+            dbc.getShelterNearParent(info);
+            dbc.getUserInfoFrom(info);
+        }
     }
 
     public static ParentInfo scanParentInfo(){
+
         Scanner scan = new Scanner(System.in);
         System.out.println("Insert Parent Information!!");
         System.out.println("Parent의 PhoneNumber를 입력해주세요");
@@ -76,6 +75,7 @@ public class Main {
         System.out.println("Parent의 위도를 입력해주세요");
         Double lon = scan.nextDouble();
         System.out.println("parent의 경도을 입력해주세요");
+
         Double lat = scan.nextDouble();
         ParentInfo newParentInfo = new ParentInfo();
         newParentInfo.setLat(lat);
@@ -106,5 +106,12 @@ public class Main {
         newInfo.setGender(uGender);
 
         return newInfo;
+    }
+
+    public static void scanUserPhoneNumToDelete(){
+        System.out.println("삭제하고자 할 User의 핸드폰 번호를 입력하세요 : ");
+        Scanner scanner = new Scanner(System.in);
+        scanner.next();
+
     }
 }

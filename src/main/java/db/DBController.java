@@ -1,9 +1,14 @@
 package db;
 
+import general.DummyGenerator;
 import shelter.models.*;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -182,7 +187,7 @@ public class DBController {
             this.makeConnection();
             Statement stmt = this.connection.createStatement();
             String sql = "Create Table Earthquake(eqId int," +
-                    "latitude NUMERIC(8,6), longtitude NUMERIC(9,6), eqTime varchar(20), eqScale float" +
+                    "latitude NUMERIC(8,6), longtitude NUMERIC(9,6), eqTime varchar(30), eqScale float" +
                     ",primary key(eqID));";
             stmt.executeUpdate(sql);
         } catch (SQLException ex){
@@ -336,6 +341,173 @@ public class DBController {
             pre_stmt.setString(2, care.getParentPnum());
             pre_stmt.execute();
 //            this.connection.commit();
+        }catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public ArrayList<ParentInfo> getParentInfoNearEarthquake(){
+        ArrayList<ParentInfo> parentInfos = new ArrayList<ParentInfo>();
+
+        ResultSet resultSet = null;
+
+        String sql = "select * \n" +
+                "from parentinfo as P\n" +
+                "where exists(\n" +
+                "       select 1\n" +
+                "       from earthquake\n" +
+                "       where ST_DistanceSphere(\n" +
+                "               ST_SetSRID(ST_MakePoint(P.latitude, P.longtitude), 4326),\n" +
+                "               ST_SetSRID(ST_MakePoint(earthquake.latitude, earthquake.longtitude), 4326) \n" +
+                "                   ) < 5000\n" +
+                "               and \n" +
+                "                   to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS.MS')\n" +
+                "               < to_timestamp(earthquake.eqtime, 'YYYY-MM-DD HH24:MI:SS.MS')\n" +
+                "       );\n";
+
+
+        try {
+
+            PreparedStatement pstmt = this.connection.prepareStatement(sql);
+            String today = null;
+            Date date = new Date();
+            System.out.println(date);
+            SimpleDateFormat sdformat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+
+            Calendar cal = Calendar.getInstance();
+
+            cal.setTime(date);
+            cal.add(Calendar.MINUTE, -10);
+            today = sdformat.format(cal.getTime());
+            pstmt.setString(1,today);
+            resultSet = pstmt.executeQuery();
+
+        }catch(SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+
+        try {
+            int i = 0;
+            System.out.println("\n--- 지진 반경 5km 내부에 거주 중인 인원의 정보 ---\n");
+            while (resultSet.next()){
+                ParentInfo parentInfo = new ParentInfo();
+                parentInfo.setpNum(resultSet.getString("parentphonenum"));
+                parentInfo.setpName(resultSet.getString("parentname"));
+                parentInfo.setLat(resultSet.getDouble("latitude"));
+                parentInfo.setLon(resultSet.getDouble("longtitude"));
+                System.out.println(parentInfo);
+                parentInfos.add(parentInfo);
+            }
+
+        }catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+
+        return parentInfos;
+    }
+
+    public ArrayList<Shelter> getShelterNearParent(ParentInfo parentInfo){
+        ArrayList<Shelter> shelters = new ArrayList<Shelter>();
+
+        System.out.println("---"+ parentInfo.getpName() +" 인근 대피소 목록" + "---");
+
+        String sql = "select *\n" +
+                "                      from shelter as S\n" +
+                "                      where ST_DistanceSphere( \n" +
+                "                               ST_SetSRID(ST_MakePoint(S.lat, S.lon), 4326),\n" +
+                "                               ST_SetSRID(ST_MakePoint(?, ?), 4326)\n" +
+                "                                   ) < 30000;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDouble(1,parentInfo.getLat());
+            preparedStatement.setDouble(2,parentInfo.getLon());
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()){
+                Shelter s = new Shelter();
+                s.setSidoName(rs.getString("sido_name"));
+                s.setSigunguName(rs.getString("sigungu_name"));
+                s.setShelNm(rs.getString("shel_nm"));
+                s.setAddress(rs.getString("address"));
+                s.setLat(rs.getDouble("lat"));
+                s.setLon(rs.getDouble("lon"));
+                System.out.println(s);
+                shelters.add(s);
+            }
+
+        }catch(SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+
+        return shelters;
+    }
+
+    public void getUserInfoFrom(ParentInfo parentInfo){
+        String sql = "select *\n" +
+                "                      from care\n" +
+                "                      where parentphonenum = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,parentInfo.getpNum());
+            ResultSet rs = preparedStatement.executeQuery();
+            System.out.println("--- "+ parentInfo.getpName() +"의 보호자 번호 ---");
+            while(rs.next()){
+                System.out.println(rs.getString("userphonenum"));
+            }
+            System.out.println();
+        }catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public void insertDummyEarthQuake(){
+        String today = null;
+        Date date = new Date();
+        System.out.println(date);
+        SimpleDateFormat sdformat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, -9);
+        today = sdformat.format(cal.getTime());
+
+        Earthquake eq = DummyGenerator.generateEarthquakes(today);
+
+        String sql = "Insert Into earthquake"+
+                " Values(?,?,?,?,?);";
+        try {
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,eq.getEqId());
+            pstmt.setDouble(2,eq.getLat());
+            pstmt.setDouble(3,eq.getLon());
+            pstmt.setString(4,eq.getEqTime());
+            pstmt.setDouble(5,eq.getEqScale());
+            pstmt.execute();
+
+        }catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+    }
+
+    public void deleteUserInfo(String userPhoneNum){
+        String sql = "delete from userinfo where userphonenum = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, userPhoneNum);
+            preparedStatement.execute();
+        }catch (SQLException ex){
+            SQLExceptionHandler.printSQLException(ex);
+        }
+
+    }
+
+    public void deleteParentInfo(String parentPhoneNum){
+        String sql = "delete from parentinfo where parentphonenum = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, parentPhoneNum);
+            preparedStatement.execute();
         }catch (SQLException ex){
             SQLExceptionHandler.printSQLException(ex);
         }

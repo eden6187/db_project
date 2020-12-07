@@ -6,8 +6,6 @@ public class ParentInfo {
     private Double lat;
     private Double lon;
 
-
-
     public String getpNum() {
         return pNum;
     }
@@ -38,5 +36,15 @@ public class ParentInfo {
 
     public void setLon(Double lon) {
         this.lon = lon;
+    }
+
+    @Override
+    public String toString() {
+        String string = "";
+        string += "이름 : " + this.pName +"\n";
+        string += "휴대폰 번호 : " + this.pNum +"\n";
+        string += "위도 : " + this.lat +"\n";
+        string += "경도 : " + this.lon +"\n";
+        return string;
     }
 }

@@ -1,8 +1,10 @@
 package general;
 
+import shelter.models.Earthquake;
 import shelter.models.ParentInfo;
 import shelter.models.UserInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DummyGenerator {
@@ -60,8 +62,8 @@ public class DummyGenerator {
 
         double lonRangeMin = 128;
         double lonRangeMax = 129;
-        double latRangeMin = 35;
-        double latRangeMax = 36;
+        double latRangeMin = 37;
+        double latRangeMax = 38;
 
         double randomLat = 0.0;
         double randomLon = 0.0;
@@ -86,5 +88,34 @@ public class DummyGenerator {
         }
 
         return parentInfo;
+    }
+
+    public static Earthquake generateEarthquakes(String date){
+
+        double lonRangeMin = 128.55;
+        double lonRangeMax = 129.22;
+        double latRangeMin = 37;
+        double latRangeMax = 38;
+
+        double randomLat = 0.0;
+        double randomLon = 0.0;
+
+        Random r = new Random();
+
+        Earthquake earthquake = new Earthquake();
+
+        randomLon = lonRangeMin + (lonRangeMax - lonRangeMin) * r.nextDouble();
+        earthquake.setLon(randomLon);
+
+        randomLat = latRangeMin + (latRangeMax - latRangeMin) * r.nextDouble();
+        earthquake.setLat(randomLat);
+
+        earthquake.setEqScale((float) 3.5);
+
+        earthquake.setEqTime(date);
+
+        earthquake.setEqId(r.nextInt(100000000));
+
+        return earthquake;
     }
 }

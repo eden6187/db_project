@@ -1,10 +1,11 @@
 package db;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SQLExceptionHandler {
 
-    public static boolean printSQLException(SQLException ex){
+    public static boolean printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
                 if (!ignoreSQLException(
@@ -13,16 +14,16 @@ public class SQLExceptionHandler {
 
                     e.printStackTrace(System.err);
                     System.err.println("SQLState: " +
-                            ((SQLException)e).getSQLState());
+                            ((SQLException) e).getSQLState());
 
                     System.err.println("Error Code: " +
-                            ((SQLException)e).getErrorCode());
+                            ((SQLException) e).getErrorCode());
 
                     System.err.println("Message: " + e.getMessage());
 
                     Throwable t = ex.getCause();
 
-                    while(t != null) {
+                    while (t != null) {
                         System.out.println("Cause: " + t);
                         t = t.getCause();
                     }
@@ -32,7 +33,7 @@ public class SQLExceptionHandler {
         return true;
     }
 
-    public static boolean ignoreSQLException(String sqlState){
+    public static boolean ignoreSQLException(String sqlState) {
         if (sqlState == null) {
             System.out.println("The SQL state is not defined!");
             return false;
@@ -42,92 +43,6 @@ public class SQLExceptionHandler {
         if (sqlState.equalsIgnoreCase("42P07"))
             return true;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         if (sqlState.equalsIgnoreCase("42P01"))
             return true;
 
@@ -135,4 +50,5 @@ public class SQLExceptionHandler {
             return true;
         return false;
     }
+
 }
