@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 public class DBController {
-    private static final String url = "jdbc:postgresql://localhost:5432/project";
-    private static final String user = "gim-yeonghyeon";
-    private static final String password = "!!dnwn556";
+    private static final String url = "jdbc:postgresql://localhost:5432/dbProject";
+    private static final String user = "postgres";
+    private static final String password = "oh54285428";
 
     private Connection connection = null;
     private static DBController singleTon;
@@ -92,20 +92,10 @@ public class DBController {
     public void createShelterTable(){
         try {
             this.makeConnection();
-            String sql  = "CREATE TABLE shelter( "
-                    +" id INTEGER PRIMARY KEY,"
-                    +" sido_name VARCHAR(255),"
-                    +" sigungu_name VARCHAR(255),"
-                    +" remarks VARCHAR(255),"
-                    +" shel_nm VARCHAR(255),"
-                    +" address VARCHAR(255),"
-                    +" lon NUMERIC(9,6),"
-                    +" lat NUMERIC(8,6),"
-                    +" shel_av INTEGER,"
-                    +" lenth INTEGER,"
-                    +" shel_div_type VARCHAR(256),"
-                    +" height INTEGER"
-                    +" );";
+            String sql  = "CREATE TABLE shelter(id INTEGER PRIMARY KEY,sido_name VARCHAR(255),"
+                    +" sigungu_name VARCHAR(255),remarks VARCHAR(255),shel_nm VARCHAR(255),"
+                    +" address VARCHAR(255),lon NUMERIC(9,6),lat NUMERIC(8,6),"
+                    +" shel_av INTEGER,lenth INTEGER,shel_div_type VARCHAR(256),height INTEGER);";
 
             Statement stmt = connection.createStatement();
             stmt.execute(sql);

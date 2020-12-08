@@ -17,7 +17,7 @@ public class EarthquakeChecker extends Thread{
                     dbc.getShelterNearParent(info);
                     dbc.getUserInfoFrom(info);
                 }
-                Thread.sleep(1000 * 10);
+                Thread.sleep(1000 * 15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

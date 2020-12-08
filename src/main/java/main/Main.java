@@ -74,7 +74,7 @@ public class Main {
         }).start();
 
 //        commandMenu();
-        new EarthquakeChecker().start();
+
 
     }
 
@@ -142,6 +142,7 @@ public class Main {
             System.out.println("3. 사용자(본인)의 정보를 삭제합니다.");
             System.out.println("4. 부모님(지인)의 정보를 삭제합니다.");
             System.out.println("5. 프로그램을 종료합니다.");
+            System.out.println("6. 지진 감지 시작");
             System.out.println("-------------------------------");
             System.out.println("메뉴 : ");
             int getMenu = scan.nextInt();
@@ -182,6 +183,9 @@ public class Main {
             }
             else if(getMenu == 5){
                 break;
+            }
+            else  if(getMenu == 6){
+                new EarthquakeChecker().start();
             }
             else {
                 System.out.println("\n 올바른 메뉴 번호를 입력하세요!!");
