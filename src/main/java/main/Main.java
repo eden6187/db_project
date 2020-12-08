@@ -2,6 +2,7 @@ package main;
 
 import com.google.gson.Gson;
 import db.DBController;
+import db.EarthquakeChecker;
 import db.SQLExceptionHandler;
 import general.DummyGenerator;
 import general.General;
@@ -14,6 +15,7 @@ import shelter.models.Shelter;
 import shelter.models.UserInfo;
 import shelter.services.ShelterService;
 
+import javax.swing.plaf.TableHeaderUI;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -64,16 +66,16 @@ public class Main {
                 dbc.insertCare(care);
             }
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                commandMenu();
+            }
+        }).start();
 
-        commandMenu();
+//        commandMenu();
+        new EarthquakeChecker().start();
 
-        dbc.insertDummyEarthQuake();
-        ArrayList<ParentInfo> parent_in_danger = (ArrayList<ParentInfo>) dbc.getParentInfoNearEarthquake();
-
-        for(ParentInfo info : parent_in_danger){
-            dbc.getShelterNearParent(info);
-            dbc.getUserInfoFrom(info);
-        }
     }
 
     public static ParentInfo scanParentInfo(){

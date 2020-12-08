@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 public class DBController {
-    private static final String url = "jdbc:postgresql://localhost:5432/dbProject";
-    private static final String user = "postgres";
-    private static final String password = "oh54285428";
+    private static final String url = "jdbc:postgresql://localhost:5432/project";
+    private static final String user = "gim-yeonghyeon";
+    private static final String password = "!!dnwn556";
 
     private Connection connection = null;
     private static DBController singleTon;
